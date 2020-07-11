@@ -1,5 +1,5 @@
 const bmi =(weight, height) => {
-    return height===0 ? "Error" : weight/(height*height);
+    return height==0 ? "Error" : weight/(height*height);
 }
 
 
