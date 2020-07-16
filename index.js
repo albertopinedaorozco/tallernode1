@@ -43,7 +43,8 @@ app.post('/users/', (req, res)=>{
         req.body.name==undefined ||
         req.body.lastName==undefined ||
         req.body.age==undefined ||
-        req.body.gender==undefined 
+        req.body.gender==undefined  ||
+        req.body.telephones==undefined 
         )
         return res.status(401).send("Existen  datos obligatorios que no fueron enviados.");
     
@@ -56,7 +57,8 @@ app.post('/users/', (req, res)=>{
         gender: req.body.gender,
         height: req.body.height,
         weight: req.body.weight,
-        telephones: req.body.telephones
+        telephones: req.body.telephones,
+        bmi: bmi(req.body.weight, req.body.height)
     }
     
     users.push(user);
@@ -68,8 +70,85 @@ app.get('/users/', (req,res)=>{
     res.status(200).send(users);
 })
 
+app.get('/users/:id', (req, res)=>{
+    const id = req.params.id;
+    if(id>0){
+        res.status(200).send(`Página del usuario ${id}`);
+    }else{
+        res.sendStatus(400);
+    }
+});
+
+app.get('/users/lastname/:lastname', (req, res)=>{
+    const lastname = req.params.lastname;
+    if(validacion(lastname)==false){
+        res.status(200).send(`Página del usuario ${lastName}`);
+    }else{
+        res.sendStatus(400);
+    }
+});
+
+app.get('/users/gender/:gender', (req, res)=>{
+    const gender = req.params.gender;
+    if(validacion(gender)==false || gender == "Hombre" || gender == "Mujer"){
+        res.status(200).send(`Página del usuario ${gender}`);
+    }else{
+        res.sendStatus(400);
+    }
+});
+
+
+app.get('/users/telephone', (req, res)=>{
+    const telephone = req.params.telephone;
+    if(telephone>0){
+        res.status(200).send(`${id}`);
+    }else{
+        res.sendStatus(400);
+    }
+});
+
+
+app.get('/users/bmi/:id', (req, res)=>{
+    const id = req.params.id;
+    const bmi = req.params.bmi;
+    if(id>0){
+        res.status(200).send(`Indice de masa corporal del usuario ${id}: ${bmi}`);
+    }else{
+        res.sendStatus(400);
+    }
+});
+
+app.get('/users/bmi/', (req, res)=>{
+    const id = req.params.id;
+    const bmi = req.params.bmi;
+    if(id>0){
+        res.status(200).send(`Indice de masa corporal del usuario ${id}: ${bmi}`);
+    }else{
+        res.sendStatus(400);
+    }
+});
+
+app.get('/bmi/:weight/:height', (req, res)=>{
+    const weight = req.params.weight;
+    const height = req.params.height;
+    const bmiResult = bmi(weight, height);
+    bmiResult === -1 ?
+        res.sendStatus(500)
+    :    
+        res.status(200).send(`bmi: ${bmiResult}`);
+});
+
 
 
 app.listen(3000, () => {
     console.log("Servidor iniciado");
    });
+
+   function validacion(texto){
+    for(i=0; i<texto.length; i++){
+       if (numeros.indexOf(texto.charAt(i),0)!=-1){
+          return true;
+       }
+    }
+    return false;
+ }
