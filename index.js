@@ -43,8 +43,7 @@ app.post('/users/', (req, res)=>{
         req.body.name==undefined ||
         req.body.lastName==undefined ||
         req.body.age==undefined ||
-        req.body.gender==undefined  ||
-        req.body.telephones==undefined 
+        req.body.gender==undefined  
         )
         return res.status(401).send("Existen  datos obligatorios que no fueron enviados.");
     
@@ -72,10 +71,10 @@ app.get('/users/', (req,res)=>{
 
 app.get('/users/:id', (req, res)=>{
     const id = req.params.id;
-    if(id>0){
-        res.status(200).send(`Página del usuario ${id}`);
+    if(id>0 && id < users.length){
+        res.status(200).send(users[id]);
     }else{
-        res.sendStatus(400);
+        res.status(400)send(`${id} no es una posición valida para el array de usuarios`);
     }
 });
 
