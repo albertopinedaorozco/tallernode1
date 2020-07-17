@@ -153,17 +153,33 @@ app.get('/users/bmi/:id', (req, res)=>{
 });
 
 
-app.get('/users/bmi/bmi/', (req, res)=>{
+app.get('/users/bmi/bmi/bmi/', (req, res)=>{
   hasUsers(res)
+  arrayUserWithBMI = users.filter(user=>{
+    //console.log(user.telephones)
+    return user != undefined && parseFloat(user.height)>0 && parseFloat(user.weight)>0
 
+ })
+ 
+ if (arrayUserWithBMI.length==0)
+    res.status(404).send(`No hay usuarios con Pesos o Alturas registradas`);
 
+ res.status(200).send(arrayUserWithBMI);
 
 });
 
-app.delete('/users/:id', (req, res)=>{
+app.delete('/users/delete/:id', (req, res)=>{
 
-    hasUsers(res)
-   
+    //hasUsers(res)
+    const id = req.params.id;
+    if(id>=0 && id < users.length){
+        console.log("whats up2")
+        users.splice(id,1);
+        res.send(users[id]);
+    }else{
+        console.log("no entro")
+        res.status(400).send(`El usuario ${id} no existe`);
+    }
 
 });
 
